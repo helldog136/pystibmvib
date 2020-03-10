@@ -6,8 +6,8 @@ import aiohttp
 from pystibmvib import STIBAPIClient
 from pystibmvib.STIBService import STIBService
 
-CLIENT_ID = 'Wirff1HT1tTH7mLX1dMQAbOEHDoa'
-CLIENT_SECRET = 'tYKqSKbmjw3hKsoNtaaKKtXXP0sa'
+CLIENT_ID = 'Wirff1HT1tTH7mLX1dMQAbOEHDoa' # Put your openapi client ID here
+CLIENT_SECRET = 'tYKqSKbmjw3hKsoNtaaKKtXXP0sa' # Put your openapi client secret here
 
 
 async def go(LOOP):

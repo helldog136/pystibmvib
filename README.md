@@ -15,33 +15,33 @@ pip install pystibmvib
 
 ```python
 """Example usage of pystibmvib."""
-import aiohttp 
+import asyncio
 
-from pystibmvib import Passages
+import aiohttp
+
+from pystibmvib import STIBAPIClient
+from pystibmvib.STIBService import STIBService
+
+CLIENT_ID = '' # Put your openapi client ID here
+CLIENT_SECRET = '' # Put your openapi client secret here
 
 
-async def test_shapefile_reader():
-    """Example usage of pystibmvib."""
-    client_id = '<put your opendata.stib-mivb.be client id here>'
-    client_secret = '<put your opendata.stib-mivb.be client secret here>'
-
-
+async def go(LOOP):
     stop_name = "scherdemael"
-    filtered_out_stop_ids = ['3713']
+    lines_filter = [(46, "Glibert")]
     custom_session = aiohttp.ClientSession()
 
-    r = Passages(LOOP, stop_name, client_id, client_secret, filtered_out_stop_ids=filtered_out_stop_ids, session=custom_session)
+    APIClient = STIBAPIClient(LOOP, custom_session, CLIENT_ID, CLIENT_SECRET)
 
-    await r.update_passages()
-    print(r.passages)
+    service = STIBService(APIClient)
+    print(await service.get_passages(stop_name, lines_filter))
 
     await custom_session.close()
 
 
+if __name__ == '__main__':
+    LOOP = asyncio.get_event_loop()
+    LOOP.run_until_complete(go(LOOP))
 
-import asyncio
 
-LOOP = asyncio.get_event_loop()
-LOOP.run_until_complete(test_shapefile_reader())
-LOOP.close()
 
