@@ -1,5 +1,8 @@
 """Initialize the package."""
-from .api import Passages
-from .shapefile_reader import ShapefileReader
+from .ShapefileService import ShapefileService
+from .STIBService import STIBService
+from pystibmvib.client.STIBAPIClient import AbstractSTIBAPIClient, STIBAPIClient
+
+from .domain import *
 
 NAME = "pystibmvib"

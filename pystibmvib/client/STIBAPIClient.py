@@ -1,13 +1,15 @@
 """Common attributes and functions."""
-import logging
 import asyncio
-import async_timeout
-import aiohttp
 import base64
+import logging
 import time
-from aiohttp import ClientSession
+from abc import ABC, abstractmethod
+
+import aiohttp
+import async_timeout
 
 LOGGER = logging.getLogger(__name__)
+
 API_BASE_URL = 'https://opendata-api.stib-mivb.be'
 
 
@@ -36,7 +38,8 @@ class OAuthTokenManager(object):
 
     async def login(self):
         headers = {}
-        headers['Authorization'] = f'Basic {str(base64.b64encode((self.client_id+":"+self.client_secret).encode("utf-8")),"utf-8")}'
+        headers[
+            'Authorization'] = f'Basic {str(base64.b64encode((self.client_id + ":" + self.client_secret).encode("utf-8")), "utf-8")}'
         try:
             async with async_timeout.timeout(5, loop=self.loop):
                 response = await self.session.post(data={"grant_type": "client_credentials"},
@@ -46,7 +49,7 @@ class OAuthTokenManager(object):
                 if response.content_type == "application/json":
                     body = await response.json()
                 else:
-                    raise aiohttp.ClientError("Unexpected content type: got "+response.content_type)
+                    raise aiohttp.ClientError("Unexpected content type: got " + response.content_type)
                 self._token = body['access_token']
                 self._exp = time.time() + body['expires_in'] - self.renew_pad_secs
         except aiohttp.ClientError as error:
@@ -62,11 +65,20 @@ class OAuthTokenManager(object):
         return self._token
 
 
-# curl -k -X GET --header "Accept: application/zip" --header "Authorization: Bearer b2ba6c7a35d667564ffa2765aec6ea07" -o ./gtfs.zip "https://opendata-api.stib-mivb.be/Files/2.0/Gtfs"
-class APIClient:
+class AbstractSTIBAPIClient(ABC):
+    @abstractmethod
+    async def api_call(self, endpoint_suffix: str, additional_headers=None):
+        pass
+
+
+class STIBAPIClient(AbstractSTIBAPIClient):
     """A class for common functions."""
 
-    def __init__(self, loop, session: ClientSession, client_id: str, client_secret: str):
+    def __init__(self,
+                 loop: asyncio.events.AbstractEventLoop,
+                 session: aiohttp.ClientSession,
+                 client_id: str,
+                 client_secret: str):
         """Initialize the class."""
         self.loop = loop
         self.session = session
