@@ -1,3 +1,4 @@
+from datetime import *
 import json
 import logging
 
@@ -15,7 +16,7 @@ class STIBService:
         self._shapefile_service = ShapefileService(stib_api_client)
         self.api_client = stib_api_client
 
-    async def get_passages(self, stop_name, line_filters=None):
+    async def get_passages(self, stop_name, line_filters=None, max_passages=None, lang: str='fr', now=datetime.now()):
         stop_infos = await self._shapefile_service.get_stop_infos(stop_name)
 
         atomic_stop_infos = stop_infos.get_lines()
@@ -37,5 +38,7 @@ class STIBService:
                                             lineId=json_passage["lineId"],
                                             destination=json_passage["destination"],
                                             expectedArrivalTime=json_passage["expectedArrivalTime"],
-                                            lineInfos=await self._shapefile_service.get_line_info(json_passage["lineId"])))
+                                            lineInfos=await self._shapefile_service.get_line_info(json_passage["lineId"]),
+                                            message=json_passage["message"][lang],
+                                            now=now))
         return passages
