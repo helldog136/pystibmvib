@@ -2,8 +2,8 @@
 import datetime
 
 from pystibmvib import AbstractSTIBAPIClient
-from pystibmvib.STIBService import PASSING_TIME_BY_POINT_SUFFIX
-from pystibmvib.ShapefileService import ENDPOINT_SHAPEFILES
+from pystibmvib.service.STIBService import PASSING_TIME_BY_POINT_SUFFIX
+from pystibmvib.service.ShapefileService import ENDPOINT_SHAPEFILES
 
 
 class MockAPIClient(AbstractSTIBAPIClient):

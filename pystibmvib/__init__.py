@@ -1,7 +1,7 @@
 """Initialize the package."""
-from .ShapefileService import ShapefileService
-from .STIBService import STIBService
-from pystibmvib.client.STIBAPIClient import AbstractSTIBAPIClient, STIBAPIClient
+from pystibmvib.service import ShapefileService
+from pystibmvib.service import STIBService
+from pystibmvib.client import AbstractSTIBAPIClient, STIBAPIClient
 
 from .domain import *
 

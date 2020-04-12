@@ -4,7 +4,7 @@ import asyncio
 import aiohttp
 
 from pystibmvib import STIBAPIClient
-from pystibmvib.STIBService import STIBService
+from pystibmvib import STIBService
 
 CLIENT_ID = 'Wirff1HT1tTH7mLX1dMQAbOEHDoa' # Put your openapi client ID here
 CLIENT_SECRET = 'tYKqSKbmjw3hKsoNtaaKKtXXP0sa' # Put your openapi client secret here

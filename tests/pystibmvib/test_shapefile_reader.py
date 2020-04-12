@@ -1,7 +1,7 @@
 import asyncio
 import unittest
 
-from pystibmvib.ShapefileService import ShapefileService
+from pystibmvib import ShapefileService
 from tests.pystibmvib import MockAPIClient
 
 

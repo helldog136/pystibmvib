@@ -2,9 +2,7 @@
 import asyncio
 import unittest
 
-import aiohttp
-
-from pystibmvib.STIBService import STIBService
+from pystibmvib import STIBService
 from tests.pystibmvib import MockAPIClient
 
 
