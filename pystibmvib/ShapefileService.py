@@ -28,7 +28,7 @@ class ShapefileService:
         self.lines_cache = {}
         self.stops_cache = {}
 
-    async def get_line_info(self, line_nr: int):
+    async def get_line_info(self, line_nr: int) -> LineInfo:
         await self._refresh_shapefiles()
         if line_nr not in self.lines_cache.keys():
             sf = shapefile.Reader(SHAPEFILESFOLDERPATH + SEP + LINES_FILENAME)
@@ -40,7 +40,7 @@ class ShapefileService:
                     break
         return self.lines_cache[line_nr]
 
-    async def get_stop_infos(self, stop_name: str):
+    async def get_stop_infos(self, stop_name: str) -> StopInfo:
         await self._refresh_shapefiles()
         if stop_name not in self.stops_cache.keys():
             sf = shapefile.Reader(SHAPEFILESFOLDERPATH + SEP + STOPS_FILENAME)
