@@ -21,10 +21,9 @@ class STIBService:
 
         atomic_stop_infos = stop_infos.get_lines()
         if line_filters is not None:
-            for line_nr, line_dest in line_filters:
-                atomic_stop_infos = filter(
-                    lambda s: s.get_line_nr() == line_nr and s.get_destination().upper() == line_dest.upper(),
-                    atomic_stop_infos)
+            line_filter_nr = [k[0] for k in line_filters]
+            line_filter_dest = [k[1] for k in line_filters]
+            atomic_stop_infos = filter(lambda s: s.get_line_nr() in line_filter_nr and s.get_destination() == line_filter_dest[line_filter_nr.index(s.get_line_nr())])
 
         passages = []
         for atomic in atomic_stop_infos:
