@@ -43,7 +43,7 @@ class STIBService:
                         pass
                     passages.append(Passage(stop_id=point["pointId"],
                                             lineId=json_passage["lineId"],
-                                            destination=json_passage["destination"],
+                                            destination=json_passage["destination"][lang],
                                             expectedArrivalTime=json_passage["expectedArrivalTime"],
                                             lineInfos=await self._shapefile_service.get_line_info(
                                                 json_passage["lineId"]),
