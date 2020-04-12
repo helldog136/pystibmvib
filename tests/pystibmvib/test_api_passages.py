@@ -1,5 +1,6 @@
 """Example usage of pystibmvib."""
 import asyncio
+import datetime
 import unittest
 
 import aiohttp
@@ -24,7 +25,15 @@ class TestPassages(unittest.TestCase):
             APIClient = MockAPIClient()
 
             service = STIBService(APIClient)
-            print(await service.get_passages(stop_name, lines_filter))
+            passages = await service.get_passages(stop_name, lines_filter)
+
+            now = datetime.datetime.now()
+            delta1 = datetime.timedelta(minutes=3, seconds=25)
+            delta2 = datetime.timedelta(minutes=13, seconds=22)
+
+            # Check message
+            self.assertEqual(passages[0].message, "foofr")
+            self.assertEqual(passages[1].message, "")
 
             await custom_session.close()
 
@@ -33,6 +42,3 @@ class TestPassages(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-
-

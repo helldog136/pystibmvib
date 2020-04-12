@@ -19,11 +19,8 @@ class Passage:
     def to_dict(self):
         return {"stop_id": self.stop_id, "lineId": self.lineId, "destination": self.destination,
                 "expectedArrivalTime": self.expectedArrivalTime, "arriving_in": self.arriving_in,
-                "message":self.message,
+                "message": self.message,
                 "line_color": self.lineInfos.get_line_color(), "line_type": self.lineInfos.get_line_type()}
-
-    def __getattribute__(self, item):
-        return self._dict[item]
 
     def __str__(self):
         return str(self.to_dict())
