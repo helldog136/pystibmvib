@@ -52,6 +52,6 @@ class STIBService:
                                                 message=message,
                                                 now=now))
                     except KeyError as ke:
-                        LOGGER.error("Error while parsing response from STIB. Raw response is: " + raw_str_passages)
+                        LOGGER.error("Error while parsing response from STIB. Raw response is: " + str(raw_str_passages))
                         raise ke
         return passages

@@ -44,7 +44,7 @@ class ShapefileService:
         await self._refresh_shapefiles()
         if stop_name not in self.stops_cache.keys():
             sf = shapefile.Reader(SHAPEFILESFOLDERPATH + SEP + STOPS_FILENAME)
-            res: StopInfo = StopInfo(stop_name)
+            res = StopInfo(stop_name)
             for record in sf.records():
                 record = record.as_dict()
                 if record["alpha_fr"].upper() == stop_name.upper() or record["alpha_nl"].upper() == stop_name.upper():
