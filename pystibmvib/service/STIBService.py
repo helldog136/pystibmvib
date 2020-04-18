@@ -40,7 +40,7 @@ class STIBService:
                     message = ""
                     try:
                         message = json_passage["message"][lang]
-                    except KeyError as ke:
+                    except KeyError:
                         pass
                     try:
                         passages.append(Passage(stop_id=point["pointId"],
@@ -52,6 +52,6 @@ class STIBService:
                                                 message=message,
                                                 now=now))
                     except KeyError as ke:
-                        LOGGER.error("Error while parsing response from STIB. Raw response is: " + raw_passages)
+                        LOGGER.error("Error while parsing response from STIB. Raw response is: " + raw_str_passages)
                         raise ke
         return passages
