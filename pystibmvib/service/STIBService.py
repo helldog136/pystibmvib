@@ -43,15 +43,26 @@ class STIBService:
                     except KeyError:
                         pass
                     try:
-                        passages.append(Passage(stop_id=point["pointId"],
-                                                lineId=json_passage["lineId"],
-                                                destination=json_passage["destination"][lang],
-                                                expectedArrivalTime=json_passage["expectedArrivalTime"],
-                                                lineInfos=await self._shapefile_service.get_line_info(
-                                                    json_passage["lineId"]),
-                                                message=message,
-                                                now=now))
+                        if message.upper() == "FIN DE SERVICE" or message.upper() == "EINDE VAN SERVICE":
+                            passages.append(Passage(stop_id=point["pointId"],
+                                                    lineId=json_passage["lineId"],
+                                                    destination="",
+                                                    expectedArrivalTime=now.strftime("%Y-%m-%dT%H:%M:%S"),
+                                                    lineInfos=await self._shapefile_service.get_line_info(
+                                                        json_passage["lineId"]),
+                                                    message=message,
+                                                    now=now))
+                        else:
+                            passages.append(Passage(stop_id=point["pointId"],
+                                                    lineId=json_passage["lineId"],
+                                                    destination=json_passage["destination"][lang],
+                                                    expectedArrivalTime=json_passage["expectedArrivalTime"],
+                                                    lineInfos=await self._shapefile_service.get_line_info(
+                                                        json_passage["lineId"]),
+                                                    message=message,
+                                                    now=now))
                     except KeyError as ke:
-                        LOGGER.error("Error while parsing response from STIB. Raw response is: " + str(raw_str_passages))
+                        LOGGER.error(
+                            "Error while parsing response from STIB. Raw response is: " + str(raw_str_passages))
                         raise ke
         return passages
