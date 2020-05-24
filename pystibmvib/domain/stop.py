@@ -14,8 +14,14 @@ class AtomicStop:
     def get_destination(self):
         return self.terminus
 
+    def get_variante(self):
+        return self.variante
+
     def __str__(self):
         return f"{self.stop_id} {self.line_nr} {self.variante} {self.terminus}"
+
+    def __repr__(self):
+        return super().__repr__() + self.__str__()
 
 
 class StopInfo:

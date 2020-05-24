@@ -14,10 +14,8 @@ class TestPassages(unittest.TestCase):
     def setUp(self):
         self.LOOP = asyncio.get_event_loop()
 
-    def tearDown(self):
-        self.LOOP.close()
 
-    def test_filtered_out(self):
+    def test_filtered_in_terminus(self):
         async def go(LOOP):
             stop_name = "scherdemael"
             lines_filter = [(46, "Glibert")]
@@ -26,7 +24,7 @@ class TestPassages(unittest.TestCase):
             APIClient = MockAPIClient()
 
             service = STIBService(APIClient)
-            passages = await service.get_passages(stop_name, lines_filter)
+            passages = await service.get_passages(stop_name, lines_filter, lang=('fr', 'fr'))
 
             now = datetime.datetime.now()
             delta1 = datetime.timedelta(minutes=3, seconds=25)
@@ -36,7 +34,27 @@ class TestPassages(unittest.TestCase):
             self.assertEqual(passages[0]["message"], "foofr")
             self.assertEqual(passages[1]["message"], "")
 
-            await custom_session.close()
+        self.LOOP.run_until_complete(go(self.LOOP))
+
+
+    def test_filtered_in_direction(self):
+        async def go(LOOP):
+            stop_name = "Scherdemael"
+            lines_filter = [(46, 1)]
+            custom_session = aiohttp.ClientSession()
+
+            APIClient = MockAPIClient()
+
+            service = STIBService(APIClient)
+            passages = await service.get_passages(stop_name, lines_filter, lang=('fr', 'fr'))
+
+            now = datetime.datetime.now()
+            delta1 = datetime.timedelta(minutes=3, seconds=25)
+            delta2 = datetime.timedelta(minutes=13, seconds=22)
+
+            # Check message
+            self.assertEqual(passages[0]["message"], "foofr")
+            self.assertEqual(passages[1]["message"], "")
 
         self.LOOP.run_until_complete(go(self.LOOP))
 
