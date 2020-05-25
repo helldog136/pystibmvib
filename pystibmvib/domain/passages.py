@@ -13,6 +13,7 @@ class Passage(dict):
         self["destination"] = destination
         self["expected_arrival_time"] = expectedArrivalTime
         self["line_color"] = lineInfos.get_line_color()
+        self["line_text_color"] = lineInfos.get_line_text_color()
         self["line_type"] = lineInfos.get_line_type()
         self["message"] = message
         delta = get_time_delta(now, expectedArrivalTime)

@@ -21,6 +21,14 @@ STOPS_FILENAME = "ACTU_STOPS"
 TIMESTAMPFILENAME = "timestamp"
 DELTA_MAX_TIMESTAMP = 1 * 60 * 60 * 24 * 7  # 1 week
 
+BLACK = '#000000'
+WHITE = '#FFFFFF'
+
+
+def hex_to_rgb(hex):
+    hex = hex.lstrip('#')
+    hlen = len(hex)
+    return tuple(int(hex[i:i + hlen // 3], 16) for i in range(0, hlen, hlen // 3))
 
 class ShapefileService:
     def __init__(self, stib_api_client: AbstractSTIBAPIClient):
@@ -36,7 +44,11 @@ class ShapefileService:
                 record = record.as_dict()
                 current_line_nr, line_type = record["LIGNE"][:-1], record["LIGNE"][-1:]
                 if int(line_nr) == int(current_line_nr):
-                    self.lines_cache[line_nr] = LineInfo(int(current_line_nr), line_type.upper(), record["COLOR_HEX"])
+                    line_color = record["COLOR_HEX"]
+                    RGB_line_color = hex_to_rgb(line_color)
+                    luminance = (0.299 * RGB_line_color[0] + 0.587 * RGB_line_color[1] + 0.114 * RGB_line_color[2])/255
+                    line_text_color = BLACK if luminance > 0.5 else WHITE
+                    self.lines_cache[line_nr] = LineInfo(int(current_line_nr), line_type.upper(), line_color, line_text_color)
                     break
         return self.lines_cache[line_nr]
 
