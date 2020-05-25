@@ -80,14 +80,15 @@ class TestPassages(unittest.TestCase):
         delta1 = datetime.timedelta(minutes=3, seconds=25)
         p = Passage(stop_id=42, lineId=21, destination="FooDest",
                     expectedArrivalTime=(now + delta1).strftime("%Y-%m-%dT%H:%M:%S"),
-                    lineInfos=LineInfo(line_nr=21, line_type="B", line_color="#ffffff"), message="FooMsg", now=now)
+                    lineInfos=LineInfo(line_nr=21, line_type="B", line_color="#FFFFFF", line_text_color="#000000"), message="FooMsg", now=now)
 
         js = json.loads(json.dumps(p))
         self.assertEqual(js["stop_id"], 42)
         self.assertEqual(js["line_id"], 21)
         self.assertEqual(js["destination"], "FooDest")
         self.assertEqual(js["expected_arrival_time"], (now + delta1).strftime("%Y-%m-%dT%H:%M:%S"))
-        self.assertEqual(js["line_color"], "#ffffff")
+        self.assertEqual(js["line_color"], "#FFFFFF")
+        self.assertEqual(js["line_text_color"], "#000000")
         self.assertEqual(js["line_type"], "B")
         self.assertEqual(js["message"], "FooMsg")
         self.assertEqual(js["arriving_in"]["min"], 3)
