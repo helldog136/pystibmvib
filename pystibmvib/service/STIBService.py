@@ -13,6 +13,10 @@ LANG_STOP_NAME = 0
 LANG_MESSAGE = 1
 
 
+class InvalidLineFilterException(Exception):
+    pass
+
+
 class STIBService:
     def __init__(self, stib_api_client: AbstractSTIBAPIClient):
         self._shapefile_service = ShapefileService(stib_api_client)
@@ -39,7 +43,8 @@ class STIBService:
                     elif atomic_stop_info.get_variante() in line_filter_dict[atomic_stop_info.get_line_nr()]:
                         new_atomic_stop_infos.append(atomic_stop_info)
             atomic_stop_infos = new_atomic_stop_infos
-
+        if len(atomic_stop_infos) < 1:
+            raise InvalidLineFilterException()
         passages = []
         for atomic in atomic_stop_infos:
             call_url_suffix = PASSING_TIME_BY_POINT_SUFFIX + atomic.get_stop_id()

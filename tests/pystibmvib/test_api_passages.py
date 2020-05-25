@@ -6,7 +6,7 @@ import unittest
 
 import aiohttp
 
-from pystibmvib import STIBService, Passage, LineInfo
+from pystibmvib import STIBService, Passage, LineInfo, InvalidLineFilterException
 from tests.pystibmvib import MockAPIClient
 
 
@@ -55,6 +55,26 @@ class TestPassages(unittest.TestCase):
             # Check message
             self.assertEqual(passages[0]["message"], "foofr")
             self.assertEqual(passages[1]["message"], "")
+
+        self.LOOP.run_until_complete(go(self.LOOP))
+
+    def test_filtered_in_invalid_filter(self):
+        async def go(LOOP):
+            stop_name = "Scherdemael"
+            lines_filter = [(104, 1)]
+            custom_session = aiohttp.ClientSession()
+
+            APIClient = MockAPIClient()
+
+            service = STIBService(APIClient)
+
+            hasRaised = False
+            try:
+                await service.get_passages(stop_name, lines_filter, lang=('fr', 'fr'))
+            except InvalidLineFilterException:
+                hasRaised = True
+
+            self.assertTrue(hasRaised)
 
         self.LOOP.run_until_complete(go(self.LOOP))
 
