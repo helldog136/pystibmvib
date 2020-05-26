@@ -11,6 +11,10 @@ class TestShapefileReader(unittest.TestCase):
 
 
     def test_filtered_out(self):
+        async def check_color(sf_reader, line_id, expected_text_color):
+            l = await sf_reader.get_line_info(line_id)
+            self.assertEqual(l.get_line_text_color(), expected_text_color)
+
         async def go(LOOP):
             APIClient = MockAPIClient()
 
@@ -30,14 +34,14 @@ class TestShapefileReader(unittest.TestCase):
             self.assertEqual(l46.get_line_type(), "B")
             self.assertEqual(l46.get_line_nr(), 46)
 
-            l3 = await sf_reader.get_line_info(3)
-            self.assertEqual(l3.get_line_text_color(), "#000000")
+            await check_color(sf_reader, 3, "#000000")
+            await check_color(sf_reader, 5, "#FFFFFF")
+            await check_color(sf_reader, 6, "#FFFFFF")
 
-            l6 = await sf_reader.get_line_info(6)
-            self.assertEqual(l6.get_line_text_color(), "#FFFFFF")
 
 
         self.LOOP.run_until_complete(go(self.LOOP))
+
 
 if __name__ == '__main__':
     unittest.main()

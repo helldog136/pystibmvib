@@ -111,10 +111,17 @@ class STIBAPIClient(AbstractSTIBAPIClient):
             async with async_timeout.timeout(5, loop=self.loop):
                 LOGGER.debug("Endpoint URL: %s", str(endpoint_suffix))
                 response = await self.session.get(url=API_BASE_URL + endpoint_suffix, headers=headers)
-                if response.content_type == "Application/json":
+                if response.content_type == "APPLICATION/JSON":
                     data = await response.json()
-                elif response.content_type == "Application/zip":
-                    data = await response.read()
+                elif response.content_type.upper() == "APPLICATION/ZIP":
+                    if response.headers.get('Transfer-Encoding') == 'chunked':
+                        buffer = b""
+                        async for dt, end_of_http_chunk in response.content.iter_chunks():
+                            buffer += dt
+                            if end_of_http_chunk:
+                                data = buffer
+                    else:
+                        data = await response.read()
                 else:
                     data = await response.read()
         except aiohttp.ClientError as error:
